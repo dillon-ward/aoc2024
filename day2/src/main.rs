@@ -17,7 +17,7 @@ fn is_safe(l: &List, s: i64) -> bool {
 }
 
 fn part1(input: &[List]) -> usize {
-    input.iter().filter(|&l| is_safe(&l, (l[l.len()-1] - l[0]).signum())).count()
+    input.iter().filter(|&l| is_safe(l, (l[l.len()-1] - l[0]).signum())).count()
 }
 
 fn part2(input: &[List]) -> usize {
