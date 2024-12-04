@@ -4,7 +4,6 @@ type List = Vec<i64>;
 
 fn main() {
     let input = get_input("day2/input.txt");
-    
     println!("Part 1: {}", part1(&input));
     println!("Part 2: {}", part2(&input));
 }
