@@ -4,7 +4,7 @@ use regex::Regex;
 fn main() {
     let input = fs::read_to_string("day3/input.txt").expect("Should have read file");
     println!("Part 1: {}", day1(&input));
-    println!("Part 2: {}", day2(&input))
+    println!("Part 2: {}", day2(&input));
 }
 
 fn day1(input: &str) -> u64 {
@@ -28,20 +28,20 @@ fn day2(input: &str) -> u64 {
         match input[pos..].find("don't()") {
             Some(p) => {
                 new_input.push_str(&input[pos..(pos + p)]);
-                pos += p;
+                pos += p + 7;
             }
             None => {
                 new_input.push_str(&input[pos..]);
-                break;
+                break
             }
         }
 
         match input[pos..].find("do()") {
             Some(p) => {
-                pos += p;
+                pos += p + 4;
             }
             None => {
-                break;
+                break
             }
         }
     }
