@@ -12,6 +12,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "bit-iter"
+version = "0.1.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d7be7c2c2141ebd90bf4d8e18e216d3205bbd5cec01dd6f022c1e5f6b6b56117"
+
+[[package]]
 name = "day1"
 version = "0.1.0"
 
@@ -37,6 +43,13 @@ version = "0.1.0"
 [[package]]
 name = "day6"
 version = "0.1.0"
+
+[[package]]
+name = "day7"
+version = "0.1.0"
+dependencies = [
+ "bit-iter",
+]
 
 [[package]]
 name = "memchr"
