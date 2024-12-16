@@ -40,6 +40,18 @@ fn get_init_pos(input: &List) -> Dir {
     panic!()
 }
 
+fn calculate_new_position(x: isize, y: isize, d: Dir) -> (isize, isize) {
+    (x + d.0, y + d.1)
+}
+
+fn is_within_bounds(new_x: isize, new_y: isize, len: Dir) -> bool {
+    new_x >= 0 && new_x < len.0 && new_y >= 0 && new_y < len.1
+}
+
+fn is_obstacle(input: &List, new_x: isize, new_y: isize) -> bool {
+    input[new_y as usize].chars().nth(new_x as usize) == Some('#')
+}
+
 fn get_path(input: &List, (gx, gy): Dir) -> Vec<Dir> {
     let mut path = vec![];
     path.push((gx, gy));
@@ -47,18 +59,20 @@ fn get_path(input: &List, (gx, gy): Dir) -> Vec<Dir> {
     let len = (input[0].len() as isize, input.len() as isize);
     let mut d = DIRS[0];
     loop {
-        let new_x = x + d.0;
-        let new_y = y + d.1;
-        if new_x < 0 || new_x >= len.0 || new_y < 0 || new_y >= len.1 {break}
-        if input[new_y as usize].chars().nth(new_x as usize) == Some('#') {
+        let (new_x, new_y) = calculate_new_position(x, y, d);
+        if !is_within_bounds(new_x, new_y, len) {
+            break;
+        }
+        if is_obstacle(input, new_x, new_y) {
             d = turn(d);
-            continue
+            continue;
         }
         x = new_x;
         y = new_y;
-        if !path.contains(&(x, y)) {path.push((x, y))}
+        if !path.contains(&(x, y)) {
+            path.push((x, y));
+        }
     }
-    
     path
 }
 
@@ -67,25 +81,26 @@ fn check_loop(input: &List, dir: &mut Dir, ox: isize, oy: isize, pos: &mut Dir, 
     let (mut x, mut y) = *pos;
     *pos = (ox, oy);
     let mut d = *dir;
-    let new_x = x + d.0;
-    let new_y = y + d.1;
-    if new_x >= 0 && new_x < len.0 && new_y >= 0 && new_y < len.1 && input[new_y as usize].chars().nth(new_x as usize) == Some('#') {
+    let (new_x, new_y) = calculate_new_position(x, y, d);
+    if is_within_bounds(new_x, new_y, len) && is_obstacle(input, new_x, new_y) {
         *dir = turn(d);
     }
     loop {
-        let new_x = x + d.0;
-        let new_y = y + d.1;
-        if new_x < 0 || new_x >= len.0 || new_y < 0 || new_y >= len.1 {return false}
-        if input[new_y as usize].chars().nth(new_x as usize) == Some('#') || (new_x, new_y) == (ox, oy) {
-            if pivots.contains(&((x, y), d)) {return true}
+        let (new_x, new_y) = calculate_new_position(x, y, d);
+        if !is_within_bounds(new_x, new_y, len) {
+            return false;
+        }
+        if is_obstacle(input, new_x, new_y) || (new_x, new_y) == (ox, oy) {
+            if pivots.contains(&((x, y), d)) {
+                return true;
+            }
             pivots.insert(((x, y), d));
             d = turn(d);
-            continue
+            continue;
         }
         x = new_x;
         y = new_y;
     }
-
 }
 
 fn part1(input: &List, init_pos: Dir) -> usize {
